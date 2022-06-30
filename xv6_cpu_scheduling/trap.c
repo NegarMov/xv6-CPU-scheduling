@@ -105,8 +105,15 @@ trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER)
-    // if the policy is 1 then if curr_ticks == QUANTUM yeild it
-    yield();
+    switch (selectedPolicy) {
+      case 0:
+        yield();
+        break;
+      case 1:
+        if (myproc()->curr_ticks >= QUANTUM)
+          yield();
+        break;
+    }
 
   // Check if the process has been killed since we yielded
   if(myproc() && myproc()->killed && (tf->cs&3) == DPL_USER)
