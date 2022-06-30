@@ -56,7 +56,10 @@ struct proc {
   uint rdtime;                 // The amount of time the process has spent in ready state
   uint stime;                  // The amount of time the process has spent in sleeping state
   int priority;                 // priority of process to use in scheduling algorithms
+
 };
+
+void updateStatus();
 
 // Process memory is laid out contiguously, low addresses first:
 //   text
