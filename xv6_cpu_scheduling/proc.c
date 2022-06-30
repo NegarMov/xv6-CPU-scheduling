@@ -567,7 +567,8 @@ procdump(void)
 
 // Update the status of all the processes in the system.
 // This method is called at each clock tick.
-void updateStatus() {
+void
+updateStatus() {
   struct proc *p;
 
   acquire(&ptable.lock);
@@ -590,4 +591,25 @@ void updateStatus() {
   }
 
   release(&ptable.lock);
+}
+
+uint
+getProcStatus(int pid, int type) {
+  struct proc *proc = myproc();
+  struct proc *p;
+
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if (p->pid == pid) {
+      proc = p;
+      break;
+    }
+  }
+
+  release(&ptable.lock);  
+
+  uint status[] = { proc->ctime, proc->ttime, proc->rntime, proc->rdtime, proc->stime };
+
+  return status[type];
 }

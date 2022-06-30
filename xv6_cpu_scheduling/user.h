@@ -25,6 +25,7 @@ int sleep(int);
 int uptime(void);
 int setPriority(int priority, int pid);
 int changePolicy(int policyId);
+uint getProcStatus(int pid, int type);
 
 // ulib.c
 int stat(const char*, struct stat*);

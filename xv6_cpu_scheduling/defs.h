@@ -120,8 +120,9 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-int            setPriority(int priority, int pid);
-int           changePolicy(int policyId);  
+int             setPriority(int priority, int pid);
+int             changePolicy(int policyId);  
+uint            getProcStatus(int pid, int type);
 // swtch.S
 void            swtch(struct context**, struct context*);
 

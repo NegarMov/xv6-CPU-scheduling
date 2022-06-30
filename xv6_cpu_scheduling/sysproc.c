@@ -107,3 +107,13 @@ sys_changePolicy(void)
   argint(0, &policyId);
   return changePolicy(policyId);
 }
+
+uint
+sys_getProcStatus(void)
+{
+  int pid;
+  int type;
+  argint(0, &pid);
+  argint(1, &type);
+  return getProcStatus(pid, type);
+}
