@@ -88,6 +88,8 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->curr_ticks = 0;
+  p->ctime = ticks;
 
   release(&ptable.lock);
 
@@ -263,6 +265,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
+  curproc->ttime = ticks;
   sched();
   panic("zombie exit");
 }
@@ -342,6 +345,8 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      //TODO: CHECK
+      //p->curr_ticks = 0;
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
@@ -531,4 +536,31 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+// Update the status of all the processes in the system.
+// This method is called at each clock tick.
+void updateStatus() {
+  struct proc *p;
+
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    switch (p->state) {
+      case RUNNING:
+        p->rntime++;
+        p->curr_ticks++;
+        break;
+      case RUNNABLE:
+        p->rdtime++;
+        break;
+      case SLEEPING:
+        p->stime++;
+        break;
+      default:
+        break;
+    }
+  }
+
+  release(&ptable.lock);
 }

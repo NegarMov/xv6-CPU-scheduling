@@ -51,6 +51,7 @@ trap(struct trapframe *tf)
     if(cpuid() == 0){
       acquire(&tickslock);
       ticks++;
+      updateStatus();
       wakeup(&ticks);
       release(&tickslock);
     }
@@ -104,6 +105,7 @@ trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER)
+    // if the policy is 1 then if curr_ticks == QUANTUM yeild it
     yield();
 
   // Check if the process has been killed since we yielded

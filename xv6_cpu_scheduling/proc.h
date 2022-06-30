@@ -57,6 +57,8 @@ struct proc {
   uint stime;                  // The amount of time the process has spent in sleeping state
 };
 
+void updateStatus();
+
 // Process memory is laid out contiguously, low addresses first:
 //   text
 //   original data and bss
