@@ -105,6 +105,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_setPriority(void);
 extern int sys_changePolicy(void);
+extern int sys_getProcStatus(void);
 
 
 static int (*syscalls[])(void) = {
@@ -130,7 +131,8 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_setPriority]   sys_setPriority,
-[SYS_changePolicy]   sys_changePolicy,
+[SYS_changePolicy]  sys_changePolicy,
+[SYS_getProcStatus] sys_getProcStatus
 };
 
 void
