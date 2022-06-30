@@ -15,6 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
+int selectedPolicy = 0;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -495,7 +496,32 @@ kill(int pid)
   release(&ptable.lock);
   return -1;
 }
+// set priority of process with the given pid.
+int
+setPriority(int priority, int pid)
+{
 
+  struct proc *p;
+  if(priority<1 || priority>6){
+    priority = 5;
+  }
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      p->priority = priority;
+    }
+  }
+  release(&ptable.lock);
+  return 0;
+}
+
+//set type od scheduling algorithm which should be use
+int
+changePolicy(int policyId)
+{
+  selectedPolicy = policyId;
+  return 0;
+}
 //PAGEBREAK: 36
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.

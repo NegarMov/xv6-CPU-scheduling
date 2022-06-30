@@ -89,3 +89,21 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_setPriority(void)
+{
+  int priority, pid;
+  argint(0, &priority);
+  argint(1, &pid);
+  return setPriority(priority, pid);
+}
+
+
+int
+sys_changePolicy(void)
+{
+  int policyId;
+  argint(0, &policyId);
+  return changePolicy(policyId);
+}
