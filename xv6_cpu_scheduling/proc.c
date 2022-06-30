@@ -91,6 +91,8 @@ found:
   p->pid = nextpid++;
   p->curr_ticks = 0;
   p->ctime = ticks;
+  p-> priority = 3;
+
 
   release(&ptable.lock);
 
@@ -340,6 +342,32 @@ scheduler(void)
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         if(p->state != RUNNABLE)
           continue;
+      }
+      release(&ptable.lock);
+    }
+    else if(selectedPolicy == 2 || selectedPolicy == 3){
+      
+      struct proc* bestPriorities[100];
+      //index to iterate array
+      int index = 0;
+      int bestPriorityFound = 6;
+
+      
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+        if(p->priority < bestPriorityFound)
+          bestPriorityFound = p->priority;
+        
+        for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+           if(p->state == RUNNABLE && p->priority == bestPriorityFound){
+               bestPriorities[index]=p;
+               index++;
+           }
+
+
+
+       }
 
         // Switch to chosen process.  It is the process's job
         // to release ptable.lock and then reacquire it
@@ -355,10 +383,8 @@ scheduler(void)
         // Process is done running for now.
         // It should have changed its p->state before coming back.
         c->proc = 0;
-      }
-      release(&ptable.lock);
     }
-
+    }
   }
 }
 
@@ -505,6 +531,7 @@ kill(int pid)
 // set priority of process with the given pid.
 int
 setPriority(int priority, int pid)
+
 {
 
   struct proc *p;
