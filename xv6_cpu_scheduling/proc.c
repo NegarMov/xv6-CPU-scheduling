@@ -388,6 +388,29 @@ scheduler(void)
   }
 }
 
+// Check whether there is a higher priority process
+int
+existProcessWithHigherPriority(int processPriority){
+  struct proc *p;
+  
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+      if(p->state == RUNNABLE && processPriority > p->priority)
+        return 1;
+      
+  
+  release(&ptable.lock);
+  return 0;
+}
+
+//Returns time quantum based on  priority
+int
+getQuantum(int priority){
+
+  return (QUANTUM *(7 - priority));
+
+}
+
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this

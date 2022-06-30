@@ -112,6 +112,15 @@ trap(struct trapframe *tf)
       case 1:
         if (myproc()->curr_ticks >= QUANTUM)
           yield();
+        break;  
+      case 2:
+        if((myproc()->curr_ticks >= QUANTUM) || existProcessWithHigherPriority(myproc()->priority))
+          yield();
+        break;
+      case 3:
+      if(myproc()->curr_ticks >= getQuantum(myproc()->priority) || existProcessWithHigherPriority(myproc()->priority))
+          yield();
+        break;
         break;
     }
 
