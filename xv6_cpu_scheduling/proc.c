@@ -772,7 +772,7 @@ getProcStatus(int pid, int type) {
 // Return -1 if this process has no children.
 // Also fills the status parameters before terminating the child process
 int
-waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime)
+waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime, int *priority)
 {
   struct proc *p;
   int havekids, pid;
@@ -792,6 +792,7 @@ waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime)
         *ttime = p->ttime;
         *rntime = p->rntime;
         *rdtime = p->rdtime;
+        *priority = p->priority;
 
         pid = p->pid;
         kfree(p->kstack);
