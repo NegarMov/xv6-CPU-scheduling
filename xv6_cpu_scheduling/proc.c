@@ -324,13 +324,9 @@ countTotalTickets(void) {
   int total = 0;
   struct proc *p;
 
-  acquire(&ptable.lock);
-
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     if(p->state == RUNNABLE)
       total += p->tickets;
-
-  release(&ptable.lock);
 
   return total;
 }
@@ -421,11 +417,16 @@ scheduler(void)
 
     else if (selectedPolicy == 4) {
       // Loop over process table looking for process to run.
-      acquire(&ptable.lock);
 
       int total_tickets = countTotalTickets();
-      int winner = random() % total_tickets;
+      int winner = random();
+      while (winner >= total_tickets)
+        winner -= total_tickets;
       int tickets_count = 0;
+
+      cprintf("winner: %d\n", winner);
+
+      acquire(&ptable.lock);
 
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
         if(p->state != RUNNABLE)
