@@ -476,6 +476,7 @@ scheduler(void)
         // Process is done running for now.
         // It should have changed its p->state before coming back.
         c->proc = 0;
+        break;
       }
       release(&ptable.lock);  
     } 
