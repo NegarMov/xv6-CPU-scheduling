@@ -27,6 +27,7 @@ int setPriority(int priority, int pid);
 int changePolicy(int policyId);
 uint getProcStatus(int pid, int type);
 int waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime);
+int getPriority(int pid);
 
 // ulib.c
 int stat(const char*, struct stat*);

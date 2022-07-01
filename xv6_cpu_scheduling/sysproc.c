@@ -108,6 +108,14 @@ sys_changePolicy(void)
   return changePolicy(policyId);
 }
 
+int
+sys_getPriority(void)
+{
+  int pid;
+  argint(0, &pid);
+  return getPriority(pid);
+}
+
 uint
 sys_getProcStatus(void)
 {

@@ -586,6 +586,23 @@ setPriority(int priority, int pid)
   return 0;
 }
 
+////get priority of process with the given pid
+int
+getPriority(int pid){
+  struct proc *p;
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      return p->priority;
+    }
+  }
+  release(&ptable.lock);
+  return 0;
+}
+
+
+
 //set type od scheduling algorithm which should be use
 int
 changePolicy(int policyId)
