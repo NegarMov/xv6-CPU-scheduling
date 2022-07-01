@@ -117,3 +117,17 @@ sys_getProcStatus(void)
   argint(1, &type);
   return getProcStatus(pid, type);
 }
+
+int
+sys_waitWithStatus(void)
+{
+  int *ctime;
+  int *ttime;
+  int *rntime;
+  int *rdtime;
+  argptr(0, (char**) &ctime, sizeof(int));
+  argptr(1, (char**) &ttime, sizeof(int));
+  argptr(2, (char**) &rntime, sizeof(int));
+  argptr(3, (char**) &rdtime, sizeof(int));
+  return waitWithStatus(ctime, ttime, rntime, rdtime);
+}

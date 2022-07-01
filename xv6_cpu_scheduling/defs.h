@@ -123,6 +123,8 @@ void            yield(void);
 int             setPriority(int priority, int pid);
 int             changePolicy(int policyId);  
 uint            getProcStatus(int pid, int type);
+int             waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 
