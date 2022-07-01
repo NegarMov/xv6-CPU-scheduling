@@ -109,6 +109,7 @@ trap(struct trapframe *tf)
       case 0:
         yield();
         break;
+      case 5:
       case 1:
         if (myproc()->curr_ticks >= QUANTUM)
           yield();

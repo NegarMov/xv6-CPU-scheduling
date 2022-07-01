@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "random.h"
 
 struct {
   struct spinlock lock;
@@ -93,6 +94,7 @@ found:
   p->ctime = ticks;
   p->priority = 3;
   p->selectedTick = ticks;
+  p->tickets = 20;
 
   release(&ptable.lock);
 
@@ -317,6 +319,22 @@ wait(void)
   }
 }
 
+int
+countTotalTickets(void) {
+  int total = 0;
+  struct proc *p;
+
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    if(p->state == RUNNABLE)
+      total += p->tickets;
+
+  release(&ptable.lock);
+
+  return total;
+}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -361,7 +379,7 @@ scheduler(void)
       release(&ptable.lock);
     }
 
-    else if (selectedPolicy == 2 || selectedPolicy == 2) {
+    else if (selectedPolicy == 2 || selectedPolicy == 3) {
 
       struct proc* bestPriorities[100];
       //index to iterate array
@@ -399,7 +417,43 @@ scheduler(void)
       }
       release(&ptable.lock);
 
-    }  
+    } 
+
+    else if (selectedPolicy == 4) {
+      // Loop over process table looking for process to run.
+      acquire(&ptable.lock);
+
+      int total_tickets = countTotalTickets();
+      int winner = random() % total_tickets;
+      int tickets_count = 0;
+
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if(p->state != RUNNABLE)
+          continue;
+
+        // find the winner process
+        if (tickets_count + p->tickets < winner) {
+          tickets_count += p->tickets;
+          continue;
+        }
+
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        p->curr_ticks = 0;
+
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+      release(&ptable.lock);  
+    } 
   }
 
   
