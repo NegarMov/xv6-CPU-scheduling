@@ -349,7 +349,7 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-
+  //cprintf("\n*****to schedleram vali dakel if nistam &&&&&&&&");
     if (selectedPolicy == 0 || selectedPolicy == 1) {
       // Loop over process table looking for process to run.
       acquire(&ptable.lock);
@@ -376,42 +376,66 @@ scheduler(void)
     }
 
     else if (selectedPolicy == 2 || selectedPolicy == 3) {
-
+      //cprintf("\n man fahmidam ki policy 2 ya 3 mikhay");
       struct proc* bestPriorities[100];
       //index to iterate array
       int index = 0;
       int bestPriorityFound = 6;
 
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-        if(p->state == RUNNABLE && p->priority < bestPriorityFound)
+      acquire(&ptable.lock);
+
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        //cprintf("\n man be for marboot be moghayese process ha vared shodam\n");  
+        if(p->state == RUNNABLE && p->priority < bestPriorityFound){
+          //cprintf("\n hagh ba negare\n");  
           bestPriorityFound = p->priority;
+        }
+      }
+
 
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-           if(p->state == RUNNABLE && p->priority == bestPriorityFound){
-               bestPriorities[index]=p;
-               index++;
-           }
+        if(p->state == RUNNABLE && p->priority == bestPriorityFound){
+          bestPriorities[index]=p;
+          index++;
+        }
+     
+      //printf("\n process mohema pedya shodan, index = %d\n", index);  
       
+      if(index<=0){
+        release(&ptable.lock);
+        continue;
+      }
+
       struct proc* p = bestPriorities[0];
+      //cprintf("\n man az oon khat rad shodam\n");
+
+    
       for(int j=0;j<index;j++){
+        //cprintf("\n man dakhel for hastam. halam khoobe. j = %d\n", j);  
         if(bestPriorities[j]-> selectedTick < p->selectedTick)
           p = bestPriorities[j];
-
+      }    
+      //cprintf("\n hagh ba mahlast"); 
       p -> selectedTick = ticks;
+      //cprintf("\n man process bargozide hastam. entekhab shodam\n");
 
-       c->proc = p;
-        switchuvm(p);
-        p->state = RUNNING;
-        p->curr_ticks = 0;
+      c->proc = p;
+      switchuvm(p);
+      p->state = RUNNING;
+      p->curr_ticks = 0;
+      //cprintf("\n man ratfam ro cpu\n");
 
-        swtch(&(c->scheduler), p->context);
-        switchkvm();
+      swtch(&(c->scheduler), p->context);
+      switchkvm();
+      //cprintf("\n context hamo gozashtan ro registera\n");
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
-        c->proc = 0;
-      }
+      c->proc = 0;
+      
       release(&ptable.lock);
+
+      //cprintf("ptable ro pas dadam");
 
     } 
 
@@ -466,11 +490,14 @@ existProcessWithHigherPriority(int processPriority){
 
   acquire(&ptable.lock);
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-      if(p->state == RUNNABLE && processPriority > p->priority)
-        return 1;
-
+      if(p->state == RUNNABLE && processPriority > p->priority){
+          release(&ptable.lock);
+          return 1;
+      }
 
   release(&ptable.lock);
+        
+
   return 0;
 }
 
@@ -636,6 +663,7 @@ setPriority(int priority, int pid)
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
       p->priority = priority;
+      break;
     }
   }
   release(&ptable.lock);
@@ -650,6 +678,7 @@ getPriority(int pid){
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(p->pid == pid){
+      release(&ptable.lock);
       return p->priority;
     }
   }

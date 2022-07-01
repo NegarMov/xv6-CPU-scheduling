@@ -5,9 +5,8 @@
 
 #define CHILDREN 30
 #define LIMIT 250
-
 int main() {
-    changePolicy(1);
+    changePolicy(2);
     
    
     for(int n = 0; n < CHILDREN; n++){
@@ -18,25 +17,25 @@ int main() {
       if(pid == 0){
      
         if(n < 5){
-            setPriority(6, pid);
+            setPriority(6, getpid());
         }
         else if(n >= 5 && n < 10){
-            setPriority(5, pid);
+            setPriority(5, getpid());
         }
         else if(n >= 10 && n < 15){
-            setPriority(4, pid);
+            setPriority(4, getpid());
         }
         else if(n >= 15 && n < 20){
-            setPriority(3, pid);
+            setPriority(3, getpid());
         }
         else if(n >= 20 && n < 25){
-            setPriority(2, pid);
+            setPriority(2, getpid());
         }
         else if(n >= 25 && n < 30){
-            setPriority(1, pid);
+            setPriority(1, getpid());
         }
         for(int i=1 ; i<=250 ; i++){
-            printf(1, "/%d/ : /%d/\n", pid, i);
+           printf(1, "/%d/ : /%d/\n", pid, i);
         }
          
         exit();
@@ -79,7 +78,7 @@ int main() {
         printf(1, "turnaround time = %d - ", TAT);
         printf(1, "waiting time = %d - ", WT);
         printf(1, "CPU burst = %d", CBT);
-        //printf(1, "sleeping time = %d - ", ST);
+      //  printf(1, "sleeping time = %d - ", ST);
         printf(1,"\n\n");
     }
 
