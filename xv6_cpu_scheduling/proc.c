@@ -349,7 +349,9 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-  //cprintf("\n*****to schedleram vali dakel if nistam &&&&&&&&");
+    
+    //cprintf("\n*****to schedleram vali dakel if nistam &&&&&&&&");
+
     if (selectedPolicy == 0 || selectedPolicy == 1) {
       // Loop over process table looking for process to run.
       acquire(&ptable.lock);
@@ -447,8 +449,6 @@ scheduler(void)
       while (winner >= total_tickets)
         winner -= total_tickets;
       int tickets_count = 0;
-
-      cprintf("winner: %d\n", winner);
 
       acquire(&ptable.lock);
 

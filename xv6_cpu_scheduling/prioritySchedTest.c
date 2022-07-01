@@ -98,12 +98,10 @@ int main() {
         printf(1, "> Priority = %d -> average CPU burst time: %d\n",i , CBTSum[i] / 6);
     }
 
-        printf(1, "\n***********************************************************");
-        printf(1, "\n>average turnaround time of all process: %d\n",someOfAllTAT /CHILDREN);
-        printf(1, ">average waiting time of all process: %d\n", sumOfAllWT /CHILDREN);
-        printf(1, ">average CPU burst time of all process: %d\n",sumOfAllCBT/CHILDREN );
-
-   
+    printf(1, "\n***********************************************************");
+    printf(1, "\n>average turnaround time of all process: %d\n",someOfAllTAT /CHILDREN);
+    printf(1, ">average waiting time of all process: %d\n", sumOfAllWT /CHILDREN);
+    printf(1, ">average CPU burst time of all process: %d\n",sumOfAllCBT/CHILDREN );
 
     exit();
 }

@@ -52,7 +52,8 @@ int main() {
         printf(1,"\n\n");
     }
 
-    printf(1, "\n\n> average turnaround time: %d\n", TATSum / CHILDREN);
+    printf(1, "\n***********************************************************");
+    printf(1, "\n> average turnaround time: %d\n", TATSum / CHILDREN);
     printf(1, "> average waiting time: %d\n", WTSum / CHILDREN);
     printf(1, "> average CPU burst time: %d\n", CBTSum / CHILDREN);
 
