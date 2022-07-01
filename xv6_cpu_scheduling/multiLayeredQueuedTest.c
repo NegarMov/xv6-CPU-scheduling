@@ -3,45 +3,44 @@
 #include "user.h"
 
 
-#define CHILDREN 30
-#define LIMIT 250
+#define CHILDREN 60
+#define LIMIT 200
 int main() {
-    changePolicy(2);
+
     
-   
-    for(int n = 0; n < CHILDREN; n++){
-      int pid = fork();
-      if(pid < 0)
-        break;
+int n, pid;
+  changePolicy(3);
 
-      if(pid == 0){
-     
-        if(n < 5){
-            setPriority(6, getpid());
+  for(n=0; n<CHILDREN; n++){
+        pid = fork();
+        if(pid < 0)
+            break;
+
+        if(pid == 0){
+            if(n < 10){
+                setPriority(1, getpid());
+            }
+            if(n >= 10 && n < 20){
+                setPriority(2, getpid());
+            }
+            if(n >= 20 && n < 30){
+                setPriority(3, getpid());
+            }
+            if(n >= 30 && n < 40){
+                setPriority(4, getpid());
+            }
+            if(n >= 40 && n < 50){
+                setPriority(5, getpid());
+            }
+            if(n >= 50){
+                setPriority(6, getpid());
+            }
+            for(int i=1 ; i<=LIMIT ; i++){
+                printf(1, "/%d/ : /%d/\n", getpid(), i);
+            }
+            exit();
         }
-        else if(n >= 5 && n < 10){
-            setPriority(5, getpid());
-        }
-        else if(n >= 10 && n < 15){
-            setPriority(4, getpid());
-        }
-        else if(n >= 15 && n < 20){
-            setPriority(3, getpid());
-        }
-        else if(n >= 20 && n < 25){
-            setPriority(2, getpid());
-        }
-        else if(n >= 25 && n < 30){
-            setPriority(1, getpid());
-        }
-        for(int i=1 ; i<=LIMIT ; i++){
-           printf(1, "/%d/ : /%d/\n", getpid(), i);
-        }
-         
-        exit();
-      }
     }
-
     int TATSum[7];
     int WTSum[7];
     int CBTSum[7];
@@ -93,9 +92,9 @@ int main() {
         sumOfAllWT += WTSum[i];
         sumOfAllCBT += CBTSum[i];
 
-        printf(1, "\n\n> Priority = %d -> average turnaround time: %d\n",i, TATSum[i] / 6);
-        printf(1, "> Priority = %d -> average waiting time: %d\n", i, WTSum[i] / 6);
-        printf(1, "> Priority = %d -> average CPU burst time: %d\n",i , CBTSum[i] / 6);
+        printf(1, "\n\n> Queue level = %d -> average turnaround time: %d\n",i, TATSum[i] / 6);
+        printf(1, "> Queue level = %d -> average waiting time: %d\n", i, WTSum[i] / 6);
+        printf(1, "> Queue level = %d -> average CPU burst time: %d\n",i , CBTSum[i] / 6);
     }
 
         printf(1, "\n***********************************************************");

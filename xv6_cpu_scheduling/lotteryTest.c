@@ -13,7 +13,7 @@ int main() {
         int pid = fork();
         if (pid == 0) {
             int tickets = 20 * (i / 4) + 10;
-            setTickets(pid, tickets);
+            setTickets(getpid(), tickets);
             for (int i = 0; i < LIMIT; i++)
                 printf(1, "/%d/ : /%d/\n", getpid(), i);
             exit();
