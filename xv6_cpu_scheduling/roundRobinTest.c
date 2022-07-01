@@ -24,9 +24,9 @@ int main() {
         int ttime;
         int rntime;
         int rdtime;
+        int priority;
 
-        int pid = waitWithStatus(&ctime, &ttime, &rntime, &rdtime);
-
+       int pid = waitWithStatus(&ctime, &ttime, &rntime, &rdtime, &priority);
         //int ctime  = getProcStatus(pid, 0);
         //int ttime  = getProcStatus(pid, 1);
         //int rntime = getProcStatus(pid, 2);
