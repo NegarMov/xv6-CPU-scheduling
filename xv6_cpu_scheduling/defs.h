@@ -125,6 +125,7 @@ int             changePolicy(int policyId);
 uint            getProcStatus(int pid, int type);
 int             waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime);
 int             getPriority(int pid);
+int             setTickets(int pid, int tickets);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

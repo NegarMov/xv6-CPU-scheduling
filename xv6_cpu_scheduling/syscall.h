@@ -25,3 +25,4 @@
 #define SYS_getProcStatus 24
 #define SYS_waitWithStatus 25
 #define SYS_getPriority 26
+#define SYS_setTickets 27

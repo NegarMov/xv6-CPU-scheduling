@@ -139,3 +139,12 @@ sys_waitWithStatus(void)
   argptr(3, (char**) &rdtime, sizeof(int));
   return waitWithStatus(ctime, ttime, rntime, rdtime);
 }
+
+int
+sys_setTickets(void)
+{
+  int tickets, pid;
+  argint(0, &pid);
+  argint(1, &tickets);
+  return setTickets(pid, tickets);
+}

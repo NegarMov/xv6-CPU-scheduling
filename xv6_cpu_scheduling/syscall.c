@@ -108,6 +108,7 @@ extern int sys_changePolicy(void);
 extern int sys_getProcStatus(void);
 extern int sys_waitWithStatus(void);
 extern int sys_getPriority(void);
+extern int sys_setTickets(void);
 
 
 static int (*syscalls[])(void) = {
@@ -137,6 +138,7 @@ static int (*syscalls[])(void) = {
 [SYS_getProcStatus] sys_getProcStatus,
 [SYS_waitWithStatus] sys_waitWithStatus,
 [SYS_getPriority] sys_getPriority,
+[SYS_setTickets]   sys_setTickets,
 };
 
 void

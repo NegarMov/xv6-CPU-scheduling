@@ -621,6 +621,7 @@ kill(int pid)
   release(&ptable.lock);
   return -1;
 }
+
 // set priority of process with the given pid.
 int
 setPriority(int priority, int pid)
@@ -655,7 +656,23 @@ getPriority(int pid){
   return 0;
 }
 
+// set the number of tickets for the process with the given pid
+int
+setTickets(int pid, int tickets) {
+  struct proc *p;
+  
+  acquire(&ptable.lock);
 
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+    if(p->pid == pid){
+      p->tickets = tickets;
+    }
+  }
+
+  release(&ptable.lock);
+
+  return 0;
+}
 
 //set type od scheduling algorithm which should be use
 int
