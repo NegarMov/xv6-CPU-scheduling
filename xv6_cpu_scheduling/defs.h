@@ -123,7 +123,7 @@ void            yield(void);
 int             setPriority(int priority, int pid);
 int             changePolicy(int policyId);  
 uint            getProcStatus(int pid, int type);
-int             waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime);
+int              waitWithStatus(int *ctime, int *ttime, int *rntime, int *rdtime, int *priority);
 int             getPriority(int pid);
 int             setTickets(int pid, int tickets);
 
