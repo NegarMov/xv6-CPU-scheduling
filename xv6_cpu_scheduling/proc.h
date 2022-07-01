@@ -56,11 +56,13 @@ struct proc {
   uint rntime;                 // The amount of time the process has spent in running state
   uint rdtime;                 // The amount of time the process has spent in ready state
   uint stime;                  // The amount of time the process has spent in sleeping state
-  int priority;                 // priority of process to use in scheduling algorithms
-
+  int priority;                // priority of process to use in scheduling algorithms
+  int selectedTick;            // This value will be use in priority scheduling algorithm - First, the value is set equal to the amount of ticks at the time of creation, and then it is updated with the amount of ticks when it is preempt
 };
 
 void updateStatus();
+int existProcessWithHigherPriority(int processPriority);
+int getQuantum(int priority);
 
 // Process memory is laid out contiguously, low addresses first:
 //   text
